@@ -69,7 +69,7 @@ public class Photo extends DataObject {
 
 	protected PhotoId id = null;
 	
-	protected Coordinate location = null;
+	protected Location location = null;
 	
 	/**
 	 *
@@ -426,7 +426,7 @@ public class Photo extends DataObject {
 	 * @return Returns location of photo  
 	 * @methodtype get
 	 */
-	public Coordinate getLocation() {
+	public Location getLocation() {
 		return location;
 	}
 
@@ -435,7 +435,7 @@ public class Photo extends DataObject {
 	 * @param location Coordinate
 	 * @methodtype set
 	 */
-	public void setLocation(Coordinate location) {
+	public void setLocation(Location location) {
 		this.location = location;
 		incWriteCount();
 	}

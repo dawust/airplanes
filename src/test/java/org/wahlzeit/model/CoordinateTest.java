@@ -10,6 +10,8 @@ public class CoordinateTest {
 	private Coordinate posNuremberg;
 	private Coordinate posGreenwich;
 	private Coordinate posZero;
+	private Coordinate posWest;
+	private Coordinate posEast;
 	private double delta;
 	
 	@Before
@@ -18,6 +20,8 @@ public class CoordinateTest {
 		posNuremberg = new Coordinate(49.27, 11.04);
 		posGreenwich = new Coordinate(51.28, 0.0);
 		posZero = new Coordinate(0.0, 0.0);
+		posWest = new Coordinate(0.0, -179.0);
+		posEast = new Coordinate(0.0, 179.0);
 		delta = 0.00001;
 	}
 	
@@ -34,7 +38,7 @@ public class CoordinateTest {
 		new Coordinate(90, 0);
 		new Coordinate(-90, 0);
 		new Coordinate(0, 180);
-		new Coordinate(0, -180);
+		new Coordinate(0, -179.9);
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
@@ -54,7 +58,12 @@ public class CoordinateTest {
 	
 	@Test(expected = IllegalArgumentException.class)
 	public void testLonTooSmall() {
-		new Coordinate(0, -180.1);
+		new Coordinate(0, -180);
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void testNaN() {
+		new Coordinate(0, Double.NaN);
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
@@ -73,22 +82,22 @@ public class CoordinateTest {
 	
 	@Test
 	public void testDistance() {
-		assertEquals(posGreenwich.getDistance(posZero).getLatitude(), 51.28, delta);
-		assertEquals(posGreenwich.getDistance(posZero).getLongitude(), 0.0, delta);
-		assertEquals(posErlangen.getDistance(posNuremberg).getLatitude(), 0.16, delta);
-		assertEquals(posErlangen.getDistance(posNuremberg).getLongitude(), 0.03, delta);
+		assertEquals(17.92426, posErlangen.getDistance(posNuremberg), delta);
+		assertEquals(17.92426, posNuremberg.getDistance(posErlangen), delta);
 	}
 	
 	@Test
 	public void testLongitudinalDistance() {
-		assertEquals(posGreenwich.getLongitudinalDistance(posZero), 0.0, delta);
-		assertEquals(posErlangen.getLongitudinalDistance(posNuremberg), 0.03, delta);
+		assertEquals(0.0, posGreenwich.getLongitudinalDistance(posZero), delta);
+		assertEquals(0.03, posErlangen.getLongitudinalDistance(posNuremberg), delta);
+		assertEquals(2.0, posWest.getLongitudinalDistance(posEast), delta);
+		assertEquals(2.0, posEast.getLongitudinalDistance(posWest), delta);
 	}
 	
 	@Test
 	public void testLatitudinalDistance() {
-		assertEquals(posGreenwich.getLatitudinalDistance(posZero), 51.28, delta);
-		assertEquals(posErlangen.getLatitudinalDistance(posNuremberg), 0.16, delta);
+		assertEquals(51.28, posGreenwich.getLatitudinalDistance(posZero), delta);
+		assertEquals(0.16, posErlangen.getLatitudinalDistance(posNuremberg), delta);
 	}
 
 
