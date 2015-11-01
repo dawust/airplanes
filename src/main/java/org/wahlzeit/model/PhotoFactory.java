@@ -54,8 +54,8 @@ public class PhotoFactory {
 	 */
 	public static synchronized PhotoFactory getInstance() {
 		if (instance == null) {
-			log.config(LogBuilder.createSystemMessage().addAction("setting generic PhotoFactory").toString());
-			setInstance(new PhotoFactory());
+			log.config(LogBuilder.createSystemMessage().addAction("setting AirplanePhotoFactory").toString());
+			setInstance(new AirplanePhotoFactory());
 		}
 
 		return instance;
