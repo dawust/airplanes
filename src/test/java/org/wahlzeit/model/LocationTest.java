@@ -7,16 +7,16 @@ import org.junit.Test;
 
 public class LocationTest {
 
-	private Coordinate posErlangen;
-	private Coordinate posNuremberg;
+	private SphericCoordinate posErlangen;
+	private SphericCoordinate posNuremberg;
 	private Location locErlangen;
 	private Location locNuremberg;
 	private double delta;
 	
 	@Before
 	public void setUp() {
-		posErlangen = new Coordinate(49.11, 11.01);
-		posNuremberg = new Coordinate(49.27, 11.04);
+		posErlangen = new SphericCoordinate(49.11, 11.01);
+		posNuremberg = new SphericCoordinate(49.27, 11.04);
 		locErlangen = new Location("Erlangen");
 		locNuremberg = new Location("Nuremberg", posNuremberg);
 		delta = 0.00001;
