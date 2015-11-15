@@ -1,5 +1,10 @@
 package org.wahlzeit.model;
 
+/**
+ * Interface for a coordinate
+ * @author Daniel Wust
+ *
+ */
 public interface Coordinate {
 	
 	/**

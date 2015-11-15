@@ -4,14 +4,15 @@ import java.io.Serializable;
 import java.security.InvalidAlgorithmParameterException;
 
 /**
- * A coordinate stores a location on the Earth
+ * Spheric representation of a coordinate
+ * @author Daniel Wust
+ *
  */
 
-public class SphericCoordinate implements Serializable, Coordinate {
+public class SphericCoordinate extends AbstractCoordinate {
 	
 	public static double EARTH_MEAN_RADIUS = 6371.0;
-	public static double DELTA = 0.0001;
-	
+
 	private double latitude;	
 	private double longitude;
 	private double radius;
@@ -159,7 +160,7 @@ public class SphericCoordinate implements Serializable, Coordinate {
 	 * @return CartesianCoordinate object;
 	 * @methodtype conversion
 	 */
-	public CartesianCoordinate toCartesian(){
+	protected CartesianCoordinate toCartesian() {
 		double radLatitude = Math.toRadians(latitude);
 		double radLongitude = Math.toRadians(longitude);
 		double x = radius * Math.cos(radLatitude) * Math.cos(radLongitude);
@@ -173,74 +174,21 @@ public class SphericCoordinate implements Serializable, Coordinate {
 	 * @param pos Coordinate
 	 * @methodtype query
 	 */
-	@Override
-	public boolean isEqual(Coordinate pos) throws IllegalArgumentException {
+	public boolean isEqual(SphericCoordinate pos) throws IllegalArgumentException {
 		assertCoordinate(pos);
-		
-		if (pos instanceof SphericCoordinate) {
-			return equals(pos);
-		} else if (pos instanceof CartesianCoordinate) {
-			return pos.equals(this.toCartesian());
-		} else {
-			throw new IllegalArgumentException("unknown Coordinate implementation");
-		}
+		return equals(pos);
 	}
-	
-	/**
-	 * Calculate distance to another Coordinate object
-	 * @param pos Coordinate
-	 * @return Distance between this and another Coordinate object
-	 * @methodtype get
-	 */
-	@Override
-	public double getDistance(Coordinate pos) throws IllegalArgumentException {
-		assertCoordinate(pos);
-		
-		if (pos instanceof SphericCoordinate) {
-			SphericCoordinate coord = (SphericCoordinate) pos;
-			return getDistance(coord);
-		} else if (pos instanceof CartesianCoordinate) {
-			CartesianCoordinate coord = (CartesianCoordinate) pos;
-			return this.toCartesian().getDistance(coord); 
-		} else {
-			throw new IllegalArgumentException("unknown Coordinate implementation");
-		}
-	}
-	
-	/**
-	 * Asserts that Coordinate object is not null
-	 * @throws IllegalArgumentException if pos is null
-	 * @methodtype assert
-	 */
-	private void assertCoordinate(Coordinate pos) throws IllegalArgumentException {
-		if (pos == null) {
-			throw new IllegalArgumentException("pos cannot be null");
-		}
-	}	
-	
-	/**
-	 * Check if two double values are the same using a delta value
-	 * @methodtype query
-	 */
-	private boolean isEqualDelta(double d1, double d2) {
-		return (Math.abs(d1 - d2) < DELTA);
-	}	
-	
+			
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof SphericCoordinate)) {
         	return false;
         } else {
         	SphericCoordinate pos = (SphericCoordinate) o;
-        	
-        	// Convert to cartesian if we have different radii
-    		if (!(isEqualDelta(radius, pos.radius))) {
-    			return this.toCartesian().equals(pos.toCartesian()); 
-    		} else {
-    	       	return (isEqualDelta(latitude, pos.getLatitude())
-            			&& isEqualDelta(longitude, pos.getLongitude()) 
-            			&& isEqualDelta(radius, pos.getRadius()));	
-    		}
+	    	return (isEqualDelta(latitude, pos.getLatitude())
+    			&& isEqualDelta(longitude, pos.getLongitude()) 
+    			&& isEqualDelta(radius, pos.getRadius())
+    			&& isEqualDelta(radius, pos.radius));	
         }
     }
     

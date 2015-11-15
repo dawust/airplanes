@@ -1,10 +1,13 @@
 package org.wahlzeit.model;
 
-import java.io.Serializable;
+/**
+ * Cartesian representation of a coordinate
+ * @author Daniel Wust
+ *
+ */
 
-public class CartesianCoordinate implements Serializable, Coordinate {
-
-	public static double DELTA = 0.0001;
+public class CartesianCoordinate extends AbstractCoordinate {
+	
 	private double x;
 	private double y;
 	private double z;
@@ -85,66 +88,27 @@ public class CartesianCoordinate implements Serializable, Coordinate {
 							+ Math.pow((z - pos.z), 2)); 
 		return res;
 	}
-	
-	/**
-	 * Calculate distance to another Coordinate object
-	 * @param pos Coordinate
-	 * @return Distance between this and another Coordinate object
-	 * @methodtype get
-	 */
-	@Override
-	public double getDistance(Coordinate pos) throws IllegalArgumentException {
-		assertCoordinate(pos);
 		
-		if (pos instanceof CartesianCoordinate) {
-			CartesianCoordinate coord = (CartesianCoordinate) pos;
-			return getDistance(coord);
-		} else if (pos instanceof SphericCoordinate) {
-			CartesianCoordinate coord = ((SphericCoordinate) pos).toCartesian();
-			return getDistance(coord);
-		} else {
-			throw new IllegalArgumentException("unknown Coordinate implementation");
-		}
-	}
+	/**
+	 * Converts Coordinate to CartesianCoordinate object
+	 * @return CartesianCoordinate object;
+	 * @methodtype conversion
+	 */
+	protected CartesianCoordinate toCartesian() {
+		return this;
+	}	
 	
 	/**
 	 * Checks for logic equality between this and another Coordinate object
 	 * @param pos Coordinate
 	 * @methodtype query
 	 */
-	@Override
-	public boolean isEqual(Coordinate pos) throws IllegalArgumentException {
+	public boolean isEqual(CartesianCoordinate pos) throws IllegalArgumentException {
 		assertCoordinate(pos);
 		
-		if (pos instanceof CartesianCoordinate) {
-			return equals(pos);
-		} else if (pos instanceof SphericCoordinate) {
-			CartesianCoordinate coord = ((SphericCoordinate) pos).toCartesian();
-			return equals(coord);
-		} else {
-			throw new IllegalArgumentException("unknown Coordinate implementation");
-		}
+		return equals(pos);
 	}
-	
-	/**
-	 * Asserts that Coordinate object is not null
-	 * @throws IllegalArgumentException if pos is null
-	 * @methodtype assert
-	 */
-	private void assertCoordinate(Coordinate pos) throws IllegalArgumentException {
-		if (pos == null) {
-			throw new IllegalArgumentException("pos cannot be null");
-		}
-	}	
-	
-	/**
-	 * Check if two double values are the same using a delta value
-	 * @methodtype query
-	 */
-	private boolean isEqualDelta(double d1, double d2) {
-		return (Math.abs(d1 - d2) < DELTA);
-	}	
-	
+
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof CartesianCoordinate)) {
