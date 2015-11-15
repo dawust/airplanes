@@ -8,11 +8,13 @@ import org.wahlzeit.model.Client;
 import org.wahlzeit.model.Globals;
 import org.wahlzeit.model.Guest;
 import org.wahlzeit.model.Moderator;
+import org.wahlzeit.model.AirplanePhoto;
 import org.wahlzeit.model.Photo;
 import org.wahlzeit.model.PhotoCase;
 import org.wahlzeit.model.Tag;
 import org.wahlzeit.model.User;
 import org.wahlzeit.model.persistence.DatastoreAdapter.ImageWrapper;
+
 
 /**
  * A badly named class, to be renamed to ObjectifyService first, something better later.
@@ -26,6 +28,7 @@ public class OfyService {
 	 */
 	static {
 		factory().register(Photo.class);
+		factory().register(AirplanePhoto.class);
 		factory().register(Globals.class);
 		factory().register(Tag.class);
 		factory().register(User.class);
