@@ -1,18 +1,13 @@
 package org.wahlzeit.model;
 
-import java.io.Serializable;
-
-import org.wahlzeit.services.DataObject;
-
-import com.googlecode.objectify.annotation.Entity;
-
 /**
  * Abstract superclass for different representations of a coordinate
  * @author Daniel Wust
  *
  */
-@Entity
-public abstract class AbstractCoordinate extends DataObject implements Coordinate {
+
+public abstract class AbstractCoordinate implements Coordinate {
+	
 	public static double DELTA = 0.0001;
 
 	/**

@@ -1,12 +1,14 @@
 package org.wahlzeit.model;
 
+import java.io.Serializable;
+
 /**
  * Interface for a coordinate
  * @author Daniel Wust
  *
  */
-public interface Coordinate {
-	
+public interface Coordinate extends Serializable {
+
 	/**
 	 * Calculate distance to another Coordinate object
 	 * @param pos Coordinate

@@ -1,7 +1,12 @@
 package org.wahlzeit.model;
 
-import java.io.Serializable;
-import java.security.InvalidAlgorithmParameterException;
+import org.wahlzeit.services.ObjectManager;
+
+import com.google.appengine.api.datastore.Key;
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Parent;
+import com.googlecode.objectify.annotation.Subclass;
 
 /**
  * Spheric representation of a coordinate
@@ -10,7 +15,7 @@ import java.security.InvalidAlgorithmParameterException;
  */
 
 public class SphericCoordinate extends AbstractCoordinate {
-	
+
 	public static double EARTH_MEAN_RADIUS = 6371.0;
 
 	private double latitude;	
