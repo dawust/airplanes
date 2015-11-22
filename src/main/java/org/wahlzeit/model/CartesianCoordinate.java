@@ -31,13 +31,17 @@ public class CartesianCoordinate extends AbstractCoordinate {
 	 * @methodtype constructor
 	 */
 	public CartesianCoordinate(double x, double y, double z) throws IllegalArgumentException {
-		if (Double.isNaN(x) || Double.isNaN(y) || Double.isNaN(z)) {
-			throw new IllegalArgumentException("Argument is NaN");
-		}
+		//preconditions
+		assertNotNaN(x);
+		assertNotNaN(y);
+		assertNotNaN(z);
 		
 		this.x = x;
 		this.y = y;
 		this.z = z;
+		
+		//postconditions
+		assertClassInvariants();		
 	}
 	
 	/**
@@ -46,11 +50,15 @@ public class CartesianCoordinate extends AbstractCoordinate {
 	 * @methodtype constructor
 	 */
 	public CartesianCoordinate(CartesianCoordinate pos) throws IllegalArgumentException {
+		//preconditions
 		assertCoordinate(pos);
 		
 		this.x = pos.getX();
 		this.y = pos.getY();
 		this.z = pos.getZ();
+		
+		//postconditions
+		assertClassInvariants();
 	}
 	
 	/**
@@ -81,12 +89,17 @@ public class CartesianCoordinate extends AbstractCoordinate {
 	 * @methodtype get
 	 */
 	public double getDistance(CartesianCoordinate pos) throws IllegalArgumentException {
+		//preconditions
 		assertCoordinate(pos);
 
-		double res = Math.sqrt(Math.pow((x - pos.x), 2) 
+		double distance = Math.sqrt(Math.pow((x - pos.x), 2) 
 							+ Math.pow((y - pos.y), 2) 
 							+ Math.pow((z - pos.z), 2)); 
-		return res;
+		
+		
+		//postconditions
+		assert (distance >= 0.0);
+		return distance;
 	}
 		
 	/**
@@ -104,9 +117,32 @@ public class CartesianCoordinate extends AbstractCoordinate {
 	 * @methodtype query
 	 */
 	public boolean isEqual(CartesianCoordinate pos) throws IllegalArgumentException {
+		//preconditions
 		assertCoordinate(pos);
 		
 		return equals(pos);
+	}
+	
+	/**
+	 * Asserts that argument is not NaN
+	 * @throws IllegalArgumentException if argument is NaN
+	 * @methodtype assert
+	 */
+	private void assertNotNaN(double x) throws IllegalArgumentException {
+		if (Double.isNaN(x)) {
+			throw new IllegalArgumentException("Argument is NaN");
+		}
+	}
+	
+	/**
+	 * Assert class invariants
+	 * @methodtype assert
+	 */
+	protected void assertClassInvariants() {
+		super.assertClassInvariants();
+		assert (!Double.isNaN(x));
+		assert (!Double.isNaN(y));
+		assert (!Double.isNaN(z));
 	}
 
     @Override

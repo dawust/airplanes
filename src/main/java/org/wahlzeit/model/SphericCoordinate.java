@@ -51,20 +51,17 @@ public class SphericCoordinate extends AbstractCoordinate {
 	 * @throws IllegalArgumentException if latitude, longitude or radius are out of boundaries
 	 */
 	public SphericCoordinate(double latitude, double longitude, double radius) throws IllegalArgumentException {
-		// Do sanity check for latitude and longitude
-		if (!(latitude >= -90.0 && latitude <= 90.0)) {
-			throw new IllegalArgumentException("Latitude out of boundaries");
-		}
-		if (!(longitude > -180.0 && longitude <= 180.0)) {
-			throw new IllegalArgumentException("Longitude out of boundaries");
-		}
-		if (!(radius >= 0.0)) {
-			throw new IllegalArgumentException("Radius out of boundaries");
-		}
+		//preconditions
+		assertLatitude(latitude);
+		assertLongitude(longitude);
+		assertRadius(radius);
 		
 		this.latitude = latitude;
 		this.longitude = longitude;
 		this.radius = radius;
+		
+		//postconditions
+		assertClassInvariants();
 	}
 	
 	/**
@@ -73,11 +70,15 @@ public class SphericCoordinate extends AbstractCoordinate {
 	 * @methodtype constructor
 	 */
 	public SphericCoordinate(SphericCoordinate pos) throws IllegalArgumentException {
+		//preconditions
 		assertCoordinate(pos);
 		
 		this.latitude = pos.getLatitude();
 		this.longitude = pos.getLongitude();
 		this.radius = pos.getRadius();
+		
+		//postconditions
+		assertClassInvariants();
 	}
 	
 	/**
@@ -87,6 +88,7 @@ public class SphericCoordinate extends AbstractCoordinate {
 	 * @methodtype get
 	 */
 	public double getDistance(SphericCoordinate pos) throws IllegalArgumentException {
+		//preconditions
 		assertCoordinate(pos);
 		
 		// Convert to cartesian if we have different radii
@@ -102,6 +104,9 @@ public class SphericCoordinate extends AbstractCoordinate {
 				(Math.sin(radLatitude) * Math.sin(radPosLatitude))
 				+ (Math.cos(radLatitude) * Math.cos(radPosLatitude) * Math.cos(radLonDistance)));
 		
+		//postconditions
+		assert (distance >= 0.0);
+		
 		return distance;		
 	}
 	
@@ -112,6 +117,7 @@ public class SphericCoordinate extends AbstractCoordinate {
 	 * @methodtype get
 	 */
 	public double getLatitudinalDistance(SphericCoordinate pos) throws IllegalArgumentException {
+		//preconditions
 		assertCoordinate(pos);
 		
 		double latDistance = Math.abs(this.latitude - pos.latitude);
@@ -125,6 +131,7 @@ public class SphericCoordinate extends AbstractCoordinate {
 	 * @methodtype get
 	 */
 	public double getLongitudinalDistance(SphericCoordinate pos) throws IllegalArgumentException {
+		//preconditions
 		assertCoordinate(pos);
 		
 		double lonDistance = Math.abs(this.longitude - pos.longitude);
@@ -180,10 +187,58 @@ public class SphericCoordinate extends AbstractCoordinate {
 	 * @methodtype query
 	 */
 	public boolean isEqual(SphericCoordinate pos) throws IllegalArgumentException {
+		//preconditions
 		assertCoordinate(pos);
 		return equals(pos);
 	}
-			
+	
+	/**
+	 * Sanity check for latitude
+	 * @param latitude latitude
+	 * @throws IllegalArgumentException if latitude is out of boundaries
+	 * @methodtype assert
+	 */
+	private void assertLatitude(double latitude) throws IllegalArgumentException{
+		if (!(latitude >= -90.0 && latitude <= 90.0)) {
+			throw new IllegalArgumentException("Latitude out of boundaries");
+		}
+	}
+	
+	/**
+	 * Sanity check for longitude
+	 * @param longitude longitude
+	 * @throws IllegalArgumentException if longitude is out of boundaries
+	 * @methodtype assert
+	 */
+	private void assertLongitude(double longitude) throws IllegalArgumentException{
+		if (!(longitude > -180.0 && longitude <= 180.0)) {
+			throw new IllegalArgumentException("Longitude out of boundaries");
+		}
+	}
+	
+	/**
+	 * Sanity check for radius
+	 * @param radius radius
+	 * @throws IllegalArgumentException if radius is out of boundaries
+	 * @methodtype assert
+	 */
+	private void assertRadius(double radius) throws IllegalArgumentException{
+		if (!(radius >= 0.0)) {
+			throw new IllegalArgumentException("Radius out of boundaries");
+		}
+	}
+	
+	/**
+	 * Assert class invariants
+	 * @methodtype assert
+	 */
+	protected void assertClassInvariants() {
+		super.assertClassInvariants();
+		assert (radius >= 0.0);
+		assert (longitude > -180.0 && longitude <= 180.0);
+		assert (latitude >= -90.0 && latitude <= 90.0);
+	}
+	
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof SphericCoordinate)) {

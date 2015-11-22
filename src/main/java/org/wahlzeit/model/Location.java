@@ -34,7 +34,7 @@ public class Location  {
 	 * @param coordinate the coordinate to set
 	 * @throws IllegalArgumentException
 	 */
-	public Location(String name, CartesianCoordinate coordinate) throws IllegalArgumentException {
+	public Location(String name, Coordinate coordinate) throws IllegalArgumentException {
 		this(name);
 		
 		if (coordinate == null) {
@@ -64,7 +64,7 @@ public class Location  {
 	 * @param coordinate the coordinate to set
 	 * @throws IllegalArgumentException
 	 */
-	public void setCoordinate(CartesianCoordinate coordinate) {
+	public void setCoordinate(Coordinate coordinate) {
 		if (coordinate == null) {
 			throw new IllegalArgumentException("coordinate cannot be null");
 		}
