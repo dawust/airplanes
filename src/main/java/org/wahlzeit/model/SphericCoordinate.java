@@ -1,5 +1,7 @@
 package org.wahlzeit.model;
 
+import java.util.HashMap;
+
 import org.wahlzeit.services.ObjectManager;
 
 import com.google.appengine.api.datastore.Key;
@@ -16,32 +18,49 @@ import com.googlecode.objectify.annotation.Subclass;
 
 public class SphericCoordinate extends AbstractCoordinate {
 
-	public static double EARTH_MEAN_RADIUS = 6371.0;
+	// Stores instances of spheric coordinates
+	protected static HashMap<String, SphericCoordinate> allSphericCoordinates = new HashMap<String, SphericCoordinate>();	
+	
+	public final static double EARTH_MEAN_RADIUS = 6371.0;
 
-	private double latitude;	
-	private double longitude;
-	private double radius;
+	private final double latitude;	
+	private final double longitude;
+	private final double radius;
 	
 	/**
-	 * Default Coordinate constructor with latitude and longitude = 0.0
+	 * Retrieves or creates instance of a SphericCoordinate
+	 * Convenience method with radius set to earth radius
+	 * @param longitude Longitude
+	 * @param latitude Latitude
+	 * @methodtype factory
 	 */
-	public SphericCoordinate() {
-		this.latitude = 0.0;
-		this.longitude = 0.0;
-		this.radius = EARTH_MEAN_RADIUS;
+	public static SphericCoordinate getInstance(double longitude, double latitude) {
+		return SphericCoordinate.getInstance(longitude, latitude, EARTH_MEAN_RADIUS);
 	}
 	
 	/**
-	 * Convenience constructor with radius set to earth radius
+	 * Retrieves or creates instance of a SphericCoordinate
 	 * @param longitude Longitude
 	 * @param latitude Latitude
-	 * @methodtype constructor
-	 * @throws IllegalArgumentException if latitude, longitude or radius are out of boundaries
+	 * @param radius Radius
+	 * @methodtype factory
 	 */
-	public SphericCoordinate(double latitude, double longitude) throws IllegalArgumentException {
-		this(latitude, longitude, EARTH_MEAN_RADIUS);
-	}	
-	
+	public static SphericCoordinate getInstance(double longitude, double latitude, double radius) {
+		String key = SphericCoordinate.asString(longitude, latitude, radius);
+		SphericCoordinate result = allSphericCoordinates.get(key);
+		if (result == null) {
+			synchronized(allSphericCoordinates) {
+				result = allSphericCoordinates.get(key);
+				if (result == null) {
+					result = new SphericCoordinate(longitude, latitude, radius);
+					allSphericCoordinates.put(key, result);
+				}
+			}
+		}
+		
+		return result;
+	}
+		
 	/**
 	 * Coordinate constructor by specifying its latitude and longitude
 	 * @param longitude Longitude
@@ -50,7 +69,7 @@ public class SphericCoordinate extends AbstractCoordinate {
 	 * @methodtype constructor
 	 * @throws IllegalArgumentException if latitude, longitude or radius are out of boundaries
 	 */
-	public SphericCoordinate(double latitude, double longitude, double radius) throws IllegalArgumentException {
+	protected SphericCoordinate(double latitude, double longitude, double radius) throws IllegalArgumentException {
 		//preconditions
 		assertLatitude(latitude);
 		assertLongitude(longitude);
@@ -59,23 +78,6 @@ public class SphericCoordinate extends AbstractCoordinate {
 		this.latitude = latitude;
 		this.longitude = longitude;
 		this.radius = radius;
-		
-		//postconditions
-		assertClassInvariants();
-	}
-	
-	/**
-	 * Coordinate constructor by specifying another Coordinate object
-	 * @param pos Coordinate
-	 * @methodtype constructor
-	 */
-	public SphericCoordinate(SphericCoordinate pos) throws IllegalArgumentException {
-		//preconditions
-		assertCoordinate(pos);
-		
-		this.latitude = pos.getLatitude();
-		this.longitude = pos.getLongitude();
-		this.radius = pos.getRadius();
 		
 		//postconditions
 		assertClassInvariants();
@@ -172,7 +174,7 @@ public class SphericCoordinate extends AbstractCoordinate {
 	 * @return CartesianCoordinate object;
 	 * @methodtype conversion
 	 */
-	protected CartesianCoordinate toCartesian() {
+	public CartesianCoordinate toCartesian() {
 		double radLatitude = Math.toRadians(latitude);
 		double radLongitude = Math.toRadians(longitude);
 		double x = radius * Math.cos(radLatitude) * Math.cos(radLongitude);
@@ -239,26 +241,19 @@ public class SphericCoordinate extends AbstractCoordinate {
 		assert (latitude >= -90.0 && latitude <= 90.0);
 	}
 	
-    @Override
-    public boolean equals(Object o) {
-        if (!(o instanceof SphericCoordinate)) {
-        	return false;
-        } else {
-        	SphericCoordinate pos = (SphericCoordinate) o;
-	    	return (isEqualDelta(latitude, pos.getLatitude())
-    			&& isEqualDelta(longitude, pos.getLongitude()) 
-    			&& isEqualDelta(radius, pos.getRadius())
-    			&& isEqualDelta(radius, pos.radius));	
-        }
-    }
-    
-    @Override
-    public int hashCode() {
-        return Double.valueOf(this.latitude).hashCode() 
-        		+ Double.valueOf(this.longitude).hashCode() 
-        		+ Double.valueOf(this.radius).hashCode();
-    }
-
-
+	/**
+	 * String representation of a specific coordinate
+	 * @param longitude Longitude
+	 * @param latitude Latitude
+	 * @param radius Radius
+	 * @methodtype conversion
+	 */
+	protected static String asString(double latitude, double longitude, double radius) {
+		return "SphericCoordinate latitude: " + latitude + "longitude: " + longitude + "radius: " + radius;
+	}
+	
+	protected String asString() {
+		return SphericCoordinate.asString(this.latitude, this.longitude, this.radius);
+	}
 
 }

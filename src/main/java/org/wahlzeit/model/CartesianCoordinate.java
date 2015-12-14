@@ -1,5 +1,7 @@
 package org.wahlzeit.model;
 
+import java.util.HashMap;
+
 /**
  * Cartesian representation of a coordinate
  * @author Daniel Wust
@@ -8,18 +10,35 @@ package org.wahlzeit.model;
 
 public class CartesianCoordinate extends AbstractCoordinate {
 	
-	private double x;
-	private double y;
-	private double z;
+	
+	// Stores instances of cartesian coordinates
+	protected static HashMap<String, CartesianCoordinate> allCartesianCoordinates = new HashMap<String, CartesianCoordinate>();	
+	
+	private final double x;
+	private final double y;
+	private final double z;
 	
 	/**
-	 * Default Coordinate constructor
-	 * @methodtype constructor
+	 * Retrieves or creates instance of a CartesianCoordinate
+	 * @param x x coordinate
+	 * @param y y coordinate
+	 * @param z z coordinate
+	 * @methodtype factory
 	 */
-	public CartesianCoordinate() {
-		this.x = 0.0;
-		this.y = 0.0;
-		this.z = 0.0;
+	public static CartesianCoordinate getInstance(double x, double y, double z) {
+		String key = CartesianCoordinate.asString(x, y, z);
+		CartesianCoordinate result = allCartesianCoordinates.get(key);
+		if (result == null) {
+			synchronized(allCartesianCoordinates) {
+				result = allCartesianCoordinates.get(key);
+				if (result == null) {
+					result = new CartesianCoordinate(x, y, z);
+					allCartesianCoordinates.put(key, result);
+				}
+			}
+		}
+		
+		return result;
 	}
 	
 	/**
@@ -30,7 +49,7 @@ public class CartesianCoordinate extends AbstractCoordinate {
 	 * @throws IllegalArgumentException if argument is NaN
 	 * @methodtype constructor
 	 */
-	public CartesianCoordinate(double x, double y, double z) throws IllegalArgumentException {
+	protected CartesianCoordinate(double x, double y, double z) throws IllegalArgumentException {
 		//preconditions
 		assertNotNaN(x);
 		assertNotNaN(y);
@@ -43,24 +62,7 @@ public class CartesianCoordinate extends AbstractCoordinate {
 		//postconditions
 		assertClassInvariants();		
 	}
-	
-	/**
-	 * Coordinate constructor by specifying another CartesianCoordinate object
-	 * @param pos Coordinate
-	 * @methodtype constructor
-	 */
-	public CartesianCoordinate(CartesianCoordinate pos) throws IllegalArgumentException {
-		//preconditions
-		assertCoordinate(pos);
 		
-		this.x = pos.getX();
-		this.y = pos.getY();
-		this.z = pos.getZ();
-		
-		//postconditions
-		assertClassInvariants();
-	}
-	
 	/**
 	 * @return x coordinate
 	 */
@@ -107,21 +109,9 @@ public class CartesianCoordinate extends AbstractCoordinate {
 	 * @return CartesianCoordinate object;
 	 * @methodtype conversion
 	 */
-	protected CartesianCoordinate toCartesian() {
+	public CartesianCoordinate toCartesian() {
 		return this;
 	}	
-	
-	/**
-	 * Checks for logic equality between this and another Coordinate object
-	 * @param pos Coordinate
-	 * @methodtype query
-	 */
-	public boolean isEqual(CartesianCoordinate pos) throws IllegalArgumentException {
-		//preconditions
-		assertCoordinate(pos);
-		
-		return equals(pos);
-	}
 	
 	/**
 	 * Asserts that argument is not NaN
@@ -144,24 +134,20 @@ public class CartesianCoordinate extends AbstractCoordinate {
 		assert (!Double.isNaN(y));
 		assert (!Double.isNaN(z));
 	}
-
-    @Override
-    public boolean equals(Object o) {
-        if (!(o instanceof CartesianCoordinate)) {
-        	return false;
-        } else {
-        	CartesianCoordinate pos = (CartesianCoordinate) o;
-        	return (isEqualDelta(x, pos.getX())
-        			&& isEqualDelta(y, pos.getY()) 
-        			&& isEqualDelta(z, pos.getZ()));
-        }
-    }
-    
-   @Override
-    public int hashCode() {
-        return Double.valueOf(this.x).hashCode() 
-        		+ Double.valueOf(this.y).hashCode() 
-        		+ Double.valueOf(this.z).hashCode();
-    }
+	
+	/**
+	 * String representation of a specific coordinate
+	 * @param x x
+	 * @param y y
+	 * @param z z
+	 * @methodtype conversion
+	 */
+	protected static String asString(double x, double y, double z) {
+		return "CartesianCoordinate x: " + x + "y: " + y + "z: " + z;
+	}
+	
+	protected String asString() {
+		return CartesianCoordinate.asString(this.x, this.y, this.z);
+	}
 
 }

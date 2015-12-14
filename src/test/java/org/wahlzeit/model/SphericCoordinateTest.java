@@ -12,22 +12,21 @@ public class SphericCoordinateTest {
 	private SphericCoordinate posZero;
 	private SphericCoordinate posWest;
 	private SphericCoordinate posEast;
-	private double delta;
+	private double delta = 0.0001;
 	
 	@Before
 	public void setUp() {
-		posErlangen = new SphericCoordinate(49.11, 11.01);
-		posNuremberg = new SphericCoordinate(49.27, 11.04);
-		posGreenwich = new SphericCoordinate(51.28, 0.0);
-		posZero = new SphericCoordinate(0.0, 0.0);
-		posWest = new SphericCoordinate(0.0, -179.0);
-		posEast = new SphericCoordinate(0.0, 179.0);
-		delta = 0.00001;
+		posErlangen = SphericCoordinate.getInstance(49.11, 11.01);
+		posNuremberg = SphericCoordinate.getInstance(49.27, 11.04);
+		posGreenwich = SphericCoordinate.getInstance(51.28, 0.0);
+		posZero = SphericCoordinate.getInstance(0.0, 0.0);
+		posWest = SphericCoordinate.getInstance(0.0, -179.0);
+		posEast = SphericCoordinate.getInstance(0.0, 179.0);
 	}
 	
 	@Test
 	public void testDefaultConstructor() {
-		SphericCoordinate c = new SphericCoordinate();
+		SphericCoordinate c = SphericCoordinate.getInstance(0.0, 0.0);
 		assertNotNull(c);
 		assertEquals(0.0, c.getLongitude(), delta);
 		assertEquals(0.0, c.getLatitude(), delta);
@@ -35,47 +34,40 @@ public class SphericCoordinateTest {
 	
 	@Test
 	public void testConstructorBoundaries() {
-		new SphericCoordinate(90, 0);
-		new SphericCoordinate(-90, 0);
-		new SphericCoordinate(0, 180);
-		new SphericCoordinate(0, -179.9);
+		SphericCoordinate.getInstance(90, 0);
+		SphericCoordinate.getInstance(-90, 0);
+		SphericCoordinate.getInstance(0, 180);
+		SphericCoordinate.getInstance(0, -179.9);
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
 	public void testLatTooLarge() {
-		new SphericCoordinate(90.1, 0);
+		SphericCoordinate.getInstance(90.1, 0);
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
 	public void testLatTooSmall() {
-		new SphericCoordinate(-90.1, 0);
+		SphericCoordinate.getInstance(-90.1, 0);
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
 	public void testLonTooLarge() {
-		new SphericCoordinate(0, 180.1);
+		SphericCoordinate.getInstance(0, 180.1);
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
 	public void testLonTooSmall() {
-		new SphericCoordinate(0, -180);
+		SphericCoordinate.getInstance(0, -180);
 	}
 	
 	@Test(expected = IllegalArgumentException.class)
 	public void testNaN() {
-		new SphericCoordinate(0, Double.NaN);
-	}
-	
-	@Test(expected = IllegalArgumentException.class)
-	public void testConstructorNull() {
-		new SphericCoordinate(null);
+		SphericCoordinate.getInstance(0, Double.NaN);
 	}
 	
 	@Test
 	public void testEquals() {
 		assertEquals(posErlangen, posErlangen);
-		assertEquals(posErlangen, new SphericCoordinate(posErlangen));
-		assertEquals(posZero, new SphericCoordinate());
 		assertNotEquals(posZero, posGreenwich);
 		assertNotEquals(posNuremberg, posErlangen);
 	}

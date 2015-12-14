@@ -1,5 +1,7 @@
 package org.wahlzeit.model;
 
+import java.util.HashMap;
+
 /**
  * Abstract superclass for different representations of a coordinate
  * @author Daniel Wust
@@ -8,7 +10,7 @@ package org.wahlzeit.model;
 
 public abstract class AbstractCoordinate implements Coordinate {
 	
-	public static double DELTA = 0.0001;
+	public final static double DELTA = 0.0001;
 
 	/**
 	 * Checks for logic equality between this and another Coordinate object
@@ -20,8 +22,17 @@ public abstract class AbstractCoordinate implements Coordinate {
 		//preconditions
 		assertCoordinate(pos);
 		
-		AbstractCoordinate other = (AbstractCoordinate) pos;
-		return this.toCartesian().isEqual(other.toCartesian());
+		// Same value object
+		if (this == pos) {
+			return true;
+		}
+		
+		// Different representation of same coordinate
+		if (this.getDistance(pos) < DELTA) {
+			return true;
+		}
+		
+		return false;
 	}
 	
 	/**
@@ -35,8 +46,7 @@ public abstract class AbstractCoordinate implements Coordinate {
 		//preconditions
 		assertCoordinate(pos);
 		
-		AbstractCoordinate other = (AbstractCoordinate) pos;
-		double distance = this.toCartesian().getDistance(other.toCartesian());
+		double distance = this.toCartesian().getDistance(pos.toCartesian());
 		
 		//postconditions
 		assert (distance >= 0.0);
@@ -49,7 +59,7 @@ public abstract class AbstractCoordinate implements Coordinate {
 	 * @return CartesianCoordinate object;
 	 * @methodtype conversion
 	 */
-	protected abstract CartesianCoordinate toCartesian();
+	public abstract CartesianCoordinate toCartesian();
 		
 	/**
 	 * Asserts that Coordinate object is not null and a subclass of AbstractCoordinate
@@ -76,7 +86,7 @@ public abstract class AbstractCoordinate implements Coordinate {
 	
 	/**
 	 * Check if two double values are the same using a delta value
-	 * @methodtype query
+	 * @methodtype query 
 	 */
 	protected boolean isEqualDelta(double d1, double d2) {
 		return (Math.abs(d1 - d2) < DELTA);

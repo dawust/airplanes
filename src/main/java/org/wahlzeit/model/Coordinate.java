@@ -24,4 +24,11 @@ public interface Coordinate extends Serializable {
 	 * @methodtype query
 	 */
 	public boolean isEqual(Coordinate pos);
+	
+	/**
+	 * Converts Coordinate to CartesianCoordinate object
+	 * @return CartesianCoordinate object;
+	 * @methodtype conversion
+	 */
+	public CartesianCoordinate toCartesian();
 }

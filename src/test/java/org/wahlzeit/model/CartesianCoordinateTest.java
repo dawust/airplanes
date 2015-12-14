@@ -9,19 +9,18 @@ public class CartesianCoordinateTest {
 	private CartesianCoordinate posErlangen;
 	private CartesianCoordinate posNuremberg;
 	private CartesianCoordinate posZero;
-	private double delta;
+	private double delta = 0.0001;
 	
 	@Before
 	public void setUp() {
-		posErlangen = new CartesianCoordinate(4093.7502, 796.4859, 4816.2704);
-		posNuremberg = new CartesianCoordinate(4080.1160, 796.0507, 4827.8979);
-		posZero = new CartesianCoordinate(0.0, 0.0, 0.0);
-		delta = 0.0001;
+		posErlangen = CartesianCoordinate.getInstance(4093.7502, 796.4859, 4816.2704);
+		posNuremberg = CartesianCoordinate.getInstance(4080.1160, 796.0507, 4827.8979);
+		posZero = CartesianCoordinate.getInstance(0.0, 0.0, 0.0);
 	}
 	
 	@Test
 	public void testDefaultConstructor() {
-		CartesianCoordinate c = new CartesianCoordinate();
+		CartesianCoordinate c = CartesianCoordinate.getInstance(0.0, 0.0, 0.0);
 		assertNotNull(c);
 		assertEquals(0.0, c.getX(), delta);
 		assertEquals(0.0, c.getY(), delta);
@@ -34,16 +33,10 @@ public class CartesianCoordinateTest {
 		new CartesianCoordinate(0, Double.NaN, 0);
 	}
 	
-	@Test(expected = IllegalArgumentException.class)
-	public void testConstructorNull() {
-		new CartesianCoordinate(null);
-	}
-	
 	@Test
 	public void testEquals() {
 		assertEquals(posErlangen, posErlangen);
-		assertEquals(posErlangen, new CartesianCoordinate(posErlangen));
-		assertEquals(posZero, new CartesianCoordinate());
+		assertEquals(posZero, CartesianCoordinate.getInstance(0.0, 0.0, 0.0));
 		assertNotEquals(posNuremberg, posErlangen);
 	}
 	

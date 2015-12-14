@@ -11,15 +11,13 @@ public class LocationTest {
 	private SphericCoordinate posNuremberg;
 	private Location locErlangen;
 	private Location locNuremberg;
-	private double delta;
 	
 	@Before
 	public void setUp() {
-		posErlangen = new SphericCoordinate(49.11, 11.01);
-		posNuremberg = new SphericCoordinate(49.27, 11.04);
+		posErlangen = SphericCoordinate.getInstance(49.11, 11.01);
+		posNuremberg = SphericCoordinate.getInstance(49.27, 11.04);
 		locErlangen = new Location("Erlangen");
 		locNuremberg = new Location("Nuremberg", posNuremberg);
-		delta = 0.00001;
 	}
 	
 	@Test

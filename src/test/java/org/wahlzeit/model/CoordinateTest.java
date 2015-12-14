@@ -17,11 +17,12 @@ public class CoordinateTest {
 	
 	@Before
 	public void setUp() {
-		posErlangenCartesian = new CartesianCoordinate(4093.7502, 796.4859, 4816.2704);
-		posNurembergCartesian = new CartesianCoordinate(4080.1160, 796.0507, 4827.8979);
 		
-		posErlangenSpheric = new SphericCoordinate(49.11, 11.01);
-		posNurembergSpheric = new SphericCoordinate(49.27, 11.04);
+		posErlangenCartesian = CartesianCoordinate.getInstance(4093.7502, 796.4859, 4816.2704);
+		posNurembergCartesian = CartesianCoordinate.getInstance(4080.1160, 796.0507, 4827.8979);
+		
+		posErlangenSpheric = SphericCoordinate.getInstance(49.11, 11.01);
+		posNurembergSpheric = SphericCoordinate.getInstance(49.27, 11.04);
 	}
 	
 	
@@ -76,4 +77,5 @@ public class CoordinateTest {
 		assertEquals(17.92426, posErlangenSpheric.getDistance(posNurembergCartesian), delta);
 		assertEquals(17.92426, posNurembergSpheric.getDistance(posErlangenCartesian), delta);
 	}
+	
 }
