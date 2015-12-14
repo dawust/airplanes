@@ -49,7 +49,7 @@ public class CartesianCoordinate extends AbstractCoordinate {
 	 * @throws IllegalArgumentException if argument is NaN
 	 * @methodtype constructor
 	 */
-	protected CartesianCoordinate(double x, double y, double z) throws IllegalArgumentException {
+	private CartesianCoordinate(double x, double y, double z) throws IllegalArgumentException {
 		//preconditions
 		assertNotNaN(x);
 		assertNotNaN(y);

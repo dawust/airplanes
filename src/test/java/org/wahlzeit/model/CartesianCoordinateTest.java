@@ -30,7 +30,7 @@ public class CartesianCoordinateTest {
 	
 	@Test(expected = IllegalArgumentException.class)
 	public void testNaN() {
-		new CartesianCoordinate(0, Double.NaN, 0);
+		CartesianCoordinate.getInstance(0, Double.NaN, 0);
 	}
 	
 	@Test

@@ -69,7 +69,7 @@ public class SphericCoordinate extends AbstractCoordinate {
 	 * @methodtype constructor
 	 * @throws IllegalArgumentException if latitude, longitude or radius are out of boundaries
 	 */
-	protected SphericCoordinate(double latitude, double longitude, double radius) throws IllegalArgumentException {
+	private SphericCoordinate(double latitude, double longitude, double radius) throws IllegalArgumentException {
 		//preconditions
 		assertLatitude(latitude);
 		assertLongitude(longitude);
@@ -180,7 +180,7 @@ public class SphericCoordinate extends AbstractCoordinate {
 		double x = radius * Math.cos(radLatitude) * Math.cos(radLongitude);
 		double y = radius * Math.cos(radLatitude) * Math.sin(radLongitude);
 		double z = radius * Math.sin(radLatitude);
-		return new CartesianCoordinate(x,y,z);
+		return CartesianCoordinate.getInstance(x, y, z);
 	}	
 	
 	/**
