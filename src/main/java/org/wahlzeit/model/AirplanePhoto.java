@@ -1,12 +1,12 @@
 package org.wahlzeit.model;
 
+import com.googlecode.objectify.annotation.Container;
 import com.googlecode.objectify.annotation.Entity;
 
 @Entity
 public class AirplanePhoto extends Photo {
 	
-	private String model;
-	private Manufacturer manufacturer;
+	private AirplaneType type;
 	
 	/**
 	 * @methodtype constructor
@@ -21,46 +21,19 @@ public class AirplanePhoto extends Photo {
 	public AirplanePhoto(PhotoId myId) {
 		super(myId);
 	}
-
-	/**
-	 * @methodtype get
-	 * @return the manufacturer
-	 */
-	public Manufacturer getManufacturer() {
-		return manufacturer;
-	}
-
+	
 	/**
 	 * @methodtype set
-	 * @param manufacturer the manufacturer to set
-	 * @throws IllegalArgumentException
+	 * @param type set type of the airplane
 	 */
-	public void setManufacturer(Manufacturer manufacturer) throws IllegalArgumentException {
-		if (manufacturer == null) {
-			throw new IllegalArgumentException("manufacturer cannot be null");
-		}
-		this.manufacturer = manufacturer;
+	public void setType(AirplaneType type) {
+		this.type = type;
 	}
-
 	/**
 	 * @methodtype get
-	 * @return the model
+	 * @return type of the airplane 
 	 */
-	public String getModel() {
-		return model;
+	public AirplaneType getType() {
+		return type;
 	}
-
-	/**
-	 * @methodtype set
-	 * @param model the model to set
-	 * @throws IllegalArgumentException
-	 */
-	public void setModel(String model) throws IllegalArgumentException {
-		if (model == null) {
-			throw new IllegalArgumentException("model cannot be null");
-		}
-		this.model = model;
-	}
-
-
 }

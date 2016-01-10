@@ -74,7 +74,7 @@ public abstract class AbstractCoordinate implements Coordinate {
 		if (!(pos instanceof AbstractCoordinate)) {
 			throw new IllegalArgumentException("pos must be of type AbstractCoordinate");
 		}
-	}	
+	}
 	
 	/**
 	 * Assert class invariants
@@ -82,7 +82,7 @@ public abstract class AbstractCoordinate implements Coordinate {
 	 */
 	protected void assertClassInvariants() {
 		// Define class invariants for abstract class here
-	};
+	}
 	
 	/**
 	 * Check if two double values are the same using a delta value
@@ -90,5 +90,13 @@ public abstract class AbstractCoordinate implements Coordinate {
 	 */
 	protected boolean isEqualDelta(double d1, double d2) {
 		return (Math.abs(d1 - d2) < DELTA);
+	}	
+	
+	/**
+	 * @param pos Coordinate
+	 * @methodtype query
+	 */
+	public boolean equals(Coordinate pos) {
+		return isEqual(pos);
 	}	
 }
