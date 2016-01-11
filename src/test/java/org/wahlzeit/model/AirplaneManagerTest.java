@@ -6,16 +6,16 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class AirplaneTypeTest {
+public class AirplaneManagerTest {
 
 	private static AirplaneType airplaneType1;
 	private static AirplaneType airplaneType2;
 	private static AirplaneType airplaneType3;
-	private static AirplaneTypeManager manager;
+	private static AirplaneManager manager;
 	
 	@BeforeClass
 	public static void setUp() {
-		manager = AirplaneTypeManager.getInstance();
+		manager = AirplaneManager.getInstance();
 		airplaneType1 = manager.createAirplaneType("Boeing", "747-8", 605, 920);
 		//airplaneType2 = manager.createAirplaneType("Boeing", "787-8", 381, 945);
 		//airplaneType3 = manager.createAirplaneType("Airbus", "A380-800", 853, 958);
@@ -35,6 +35,15 @@ public class AirplaneTypeTest {
 		assertEquals(type.getModel(), "747-8");
 		assertEquals(type.getCapacity(), 605);
 		assertEquals(type.getMaxAirspeed(), 920);
+	}
+	
+	@Test
+	public void createAirplane() {
+		AirplaneType A380 = manager.getAirplaneType("Airbus", "A380"); 
+		Airplane AIMA = manager.createAirplane(A380, "Lufthansa", "D-AIMA", 4);
+		Airplane AIML = manager.createAirplane(A380, "Lufthansa", "D-AIML", 1);
+		assertEquals(AIMA.getType(), AIML.getType());
+		
 	}
 
 }

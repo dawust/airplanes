@@ -6,7 +6,7 @@ import com.googlecode.objectify.annotation.Entity;
 @Entity
 public class AirplanePhoto extends Photo {
 	
-	private AirplaneType type;
+	private Airplane airplane;
 	
 	/**
 	 * @methodtype constructor
@@ -24,16 +24,16 @@ public class AirplanePhoto extends Photo {
 	
 	/**
 	 * @methodtype set
-	 * @param type set type of the airplane
+	 * @param type set the airplane
 	 */
-	public void setType(AirplaneType type) {
-		this.type = type;
+	public void setAirplane(Airplane airplane) {
+		this.airplane = airplane;
 	}
 	/**
 	 * @methodtype get
-	 * @return type of the airplane 
+	 * @return the airplane 
 	 */
-	public AirplaneType getType() {
-		return type;
+	public Airplane getType() {
+		return airplane;
 	}
 }

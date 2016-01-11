@@ -6,16 +6,19 @@ import com.googlecode.objectify.annotation.Container;
 import com.googlecode.objectify.annotation.Entity;
 
 @Entity
-public class AirplaneTypeManager  {
+public class AirplaneManager  {
 
-	protected static final AirplaneTypeManager instance = new AirplaneTypeManager();
+	protected static final AirplaneManager instance = new AirplaneManager();
 	@Container 
 	protected HashMap<String, AirplaneType> typeMap = new HashMap<String, AirplaneType>();
+	
+	@Container 
+	protected HashMap<Long, Airplane> airplaneMap = new HashMap<Long, Airplane>();
 
 	/**
 	 * @methodtype constructor
 	 */
-	public AirplaneTypeManager() {
+	public AirplaneManager() {
 		
 	}
 
@@ -23,7 +26,7 @@ public class AirplaneTypeManager  {
 	 * Returns singleton instance of manager
 	 * @methodtype get
 	 */
-	public static final AirplaneTypeManager getInstance() {
+	public static final AirplaneManager getInstance() {
 		return instance;
 	}
 	
@@ -54,6 +57,29 @@ public class AirplaneTypeManager  {
 	 */
 	public AirplaneType getAirplaneType(String manufacturer, String model) {
 		return typeMap.get(AirplaneType.asString(manufacturer, model));
+	}
+	
+	/**
+	 * Creates new Airplane
+	 * @param type type class for airplane
+	 * @param airline airline
+	 * @param registration registration number
+	 * @param age age of airplane
+	 * @methodtype factory
+	 */
+	public synchronized Airplane createAirplane(AirplaneType type, String airline, String registration, int age) {
+		Airplane airplane = new Airplane(type, airline, registration, age);
+		airplaneMap.put(airplane.getID(), airplane);
+		
+		return airplane;
+	}
+	
+	/**
+	 * Returns AirplaneType for a specified unique ID
+	 * @methodtype get
+	 */
+	public Airplane getAirplane(long id) {
+		return airplaneMap.get(id);
 	}
 }
 
